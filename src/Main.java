@@ -17,7 +17,7 @@ public class Main {
 			game.addEntity(new Dog());
 		}
 		for (int i = 0; i < catsCount; ++i){
-			game.addEntity(new Cat());
+			game.addEntity(new FancyCat());
 		}
 		game.run(BeginPetSimulation.class, new BeginPetSimulation());
 	}

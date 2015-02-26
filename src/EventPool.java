@@ -75,11 +75,12 @@ public class EventPool {
 	}
 	
 	/**
-	 * 
 	 * @param clazz the Event class whose reactions are being searched for
 	 * @return Collection of the relevant type of Reaction
 	 */
 	private <E extends Event> Collection<Reaction<E>> getClassReactions(Class<E> clazz){
+		@SuppressWarnings("unchecked") //This is a safe operation because eventSets.get(clazz) is always
+		                               //already of type ReactionCollection<E>. The compiler is just stupid.
 		ReactionCollection<E> rc = (ReactionCollection<E>) eventSets.get(clazz);
 		if (rc == null){
 			rc = new ReactionCollection<E>();
