@@ -8,14 +8,18 @@ public class Main {
 		pool.addReaction(DogPresenceEvent.class,
 				new Reaction<DogPresenceEvent>() {
 					@Override
-					public void react(DogPresenceEvent event) {
+					public boolean react(DogPresenceEvent event) {
 						++a;
 						System.out.println("dog event! yikes!");
+						return false;
 					}
 				});
 		pool.addReactFunc(DogPresenceEvent.class, (DogPresenceEvent e) -> {
 			System.out.println("this is also a reaction");
+			return new Boolean(false);
 		});
+		Dog murphy = new Dog();
+		murphy.init(pool);
 		pool.reactToEvent(DogPresenceEvent.class, new DogPresenceEvent());
 		pool.reactToEvent(DogPresenceEvent.class, new DogPresenceEvent());
 		System.out.println("num of dog events: " + a);

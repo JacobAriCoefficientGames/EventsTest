@@ -1,3 +1,3 @@
 public interface Reaction<E extends Event> {
-	public void react(E event);
+	public boolean react(E event);
 }

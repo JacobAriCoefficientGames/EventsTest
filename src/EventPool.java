@@ -1,12 +1,25 @@
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * 
+ * @author Jacob
+ * this class deals with controlling the interactions of Entities
+ */
 public class EventPool {
+	/**
+	 * @author Jacob
+	 *
+	 * @param <E> the type of event
+	 * 
+	 * This class is just a wrapper around a list of Reaction objects, but is
+	 * necessary because of the weird way that casting Java generic's work
+	 */
 	class ReactionCollection<E extends Event>{
 		Collection<Reaction<E>> reactions;
 
@@ -19,33 +32,51 @@ public class EventPool {
 		}
 
 	}
+	/**
+	 * holds all of the reactions that happen to various sorts of events
+	 */
 	Map<Class<? extends Event>, ReactionCollection<? extends Event>> eventSets;
+	
 	public EventPool() {
 		eventSets = new HashMap<Class<? extends Event>, ReactionCollection<? extends Event>>();
 	}
 
+	/**
+	 * 
+	 * @param clazz the class of the Event type
+	 * @param event the actual event that gets reacted to
+	 */
 	public <E extends Event> void reactToEvent(Class<E> clazz, E event) {
-		for (Reaction<E> reaction : getClassReactions(clazz)){
-			reaction.react(event);
+		Iterator<Reaction<E>> it = getClassReactions(clazz).iterator();
+		for (;it.hasNext();){
+			Reaction<E> react = it.next();
+			if (!react.react(event)){
+				it.remove();
+			}
 		}
 	}
 
+	/**
+	 * 
+	 * @param clazz the class of event that the Reaction reacts to
+	 * @param reaction the reaction object
+	 */
+	public <E extends Event> void addReaction(Class<E> clazz, Reaction<E> reaction){
+		Collection<Reaction<E>> reactList = getClassReactions(clazz);
+		reactList.add(reaction);
+	}
+	
 	public <E extends Event> void addReactions(Class<E> clazz, Collection<Reaction<E>> reactions){
 		Collection<Reaction<E>> reactList = getClassReactions(clazz);
 		reactList.addAll(reactions);
 	}
 	
-	public <E extends Event> void addReaction(Class<E> clazz, Reaction<E> reaction){
-		Collection<Reaction<E>> reactList = getClassReactions(clazz);
-		reactList.add(reaction);
-	}
-
-	public <E extends Event> void addReactFunc(Class<E> clazz, Consumer<E> func){
+	public <E extends Event> void addReactFunc(Class<E> clazz, Function<E, Boolean> func){
 		addReaction(clazz, new Reaction<E>(){
 
 			@Override
-			public void react(Event event) {
-				func.accept((E) event);
+			public boolean react(Event event) {
+				return func.apply((E) event);
 			}
 
 		});
