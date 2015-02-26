@@ -5,9 +5,21 @@ import java.util.List;
 import java.util.Map;
 
 public class EventPool {
-	Map<Class<? extends Event>, Collection<Reaction<? extends  Event>>> eventSets;
+	class ReactionCollection<E extends Event>{
+		Collection<Reaction<E>> reactions;
+		
+		ReactionCollection(){
+			reactions = new ArrayList<Reaction<E>>();
+		}
+
+		public Collection<Reaction<E>> getReactions() {
+			return reactions;
+		}
+		
+	}
+	Map<Class<? extends Event>, ReactionCollection<? extends Event>> eventSets;
 	public EventPool() {
-		eventSets = new HashMap<Class<? extends Event>, Collection<Reaction<? extends Event>>>();
+		eventSets = new HashMap<Class<? extends Event>, ReactionCollection<? extends Event>>();
 	}
 	
 	public <E extends Event> void reactToEvent(Class<E> clazz, E event) {
@@ -22,11 +34,12 @@ public class EventPool {
 	}
 	
 	private <E extends Event> Collection<Reaction<E>> getClassReactions(Class<E> clazz){
-		Collection<Reaction<E>> reactions = (Collection<Reaction<E>>) eventSets.get(clazz);
-		if (reactions == null){
-			reactions = new ArrayList();
-			eventSets.put(clazz, reactions);
+		ReactionCollection<E> rc = (ReactionCollection<E>) eventSets.get(clazz);
+		if (rc == null){
+			rc = new ReactionCollection<E>();
+			eventSets.put(clazz, rc);
 		}
+		Collection<Reaction<E>> reactions = rc.getReactions();
 		return reactions;
 	}
 }
