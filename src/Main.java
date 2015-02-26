@@ -5,7 +5,7 @@ public class Main {
 	static int a;
 	public static void main(String[] args){
 		EventPool pool = new EventPool();
-		pool.notifyFor(DogPresenceEvent.class, Collections.singletonList(
+		pool.addReaction(DogPresenceEvent.class, Collections.singletonList(
 
 				new Reaction<DogPresenceEvent>() {
 					@Override
@@ -16,8 +16,8 @@ public class Main {
 				})
 
 				);
-		pool.addEvents(DogPresenceEvent.class, Collections.singletonList(new DogPresenceEvent()));
-		pool.addEvents(DogPresenceEvent.class, Collections.singletonList(new DogPresenceEvent()));
+		pool.reactToEvent(DogPresenceEvent.class, new DogPresenceEvent());
+		pool.reactToEvent(DogPresenceEvent.class, new DogPresenceEvent());
 		System.out.println("num of dog events: " + a);
 		//System.out.println(pool.getEvents(DogPresenceEvent.class).size());
 	}
