@@ -1,28 +1,25 @@
-import java.util.Collections;
-
+import java.io.IOException;
+import java.util.Scanner;
 
 public class Main {
 	static int a;
 	public static void main(String[] args){
-		EventPool pool = new EventPool();
-		pool.addReaction(DogPresenceEvent.class,
-				new Reaction<DogPresenceEvent>() {
-					@Override
-					public boolean react(DogPresenceEvent event) {
-						++a;
-						System.out.println("dog event! yikes!");
-						return false;
-					}
-				});
-		pool.addReactFunc(DogPresenceEvent.class, (DogPresenceEvent e) -> {
-			System.out.println("this is also a reaction");
-			return new Boolean(false);
-		});
-		Dog murphy = new Dog();
-		murphy.init(pool);
-		pool.reactToEvent(DogPresenceEvent.class, new DogPresenceEvent());
-		pool.reactToEvent(DogPresenceEvent.class, new DogPresenceEvent());
-		System.out.println("num of dog events: " + a);
-		//System.out.println(pool.getEvents(DogPresenceEvent.class).size());
+		Scanner in = new Scanner(System.in);
+		System.out.println("how many dogs do you want?");
+		int dogCount = in.nextInt();
+		
+		System.out.println("how many cats do you want?");
+		int catsCount = in.nextInt();
+
+
+		Game game = new Game();
+		for (int i = 0; i < dogCount; ++i){
+			game.addEntity(new Dog());
+		}
+		for (int i = 0; i < catsCount; ++i){
+			game.addEntity(new Cat());
+		}
+		game.run(BeginPetSimulation.class, new BeginPetSimulation());
 	}
+
 }
