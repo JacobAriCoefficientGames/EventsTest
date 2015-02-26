@@ -6,6 +6,7 @@
  * 
  * this represents a function that gets run when the E event type happens
  */
+@FunctionalInterface
 public interface Reaction<E extends Event> {
 	/**
 	 * 

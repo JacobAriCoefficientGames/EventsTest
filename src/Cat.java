@@ -6,13 +6,13 @@ public class Cat implements Entity{
 	}
 	@Override
 	public void init(EventPool pool) {
-		pool.addReactFunc(DogPresenceEvent.class, (DogPresenceEvent e, EventPool p) -> {
+		pool.addReaction(DogPresenceEvent.class, (DogPresenceEvent e, EventPool p) -> {
 			dogsSeen++;
 			if (dogsSeen > 3){
 				System.out.println("SO MANY DOGS!!!! SPAZZZZ");
 				p.reactToEvent(CatSpazzEvent.class, new CatSpazzEvent("I'm spazzing because there are " + dogsSeen + "dogs."));
 			}
-			return Boolean.TRUE; //repeat always
+			return true; //repeat always
 		});
 	}
 	

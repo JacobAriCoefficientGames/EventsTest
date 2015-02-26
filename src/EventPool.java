@@ -3,9 +3,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * 
@@ -77,22 +74,6 @@ public class EventPool {
 		reactList.addAll(reactions);
 	}
 	
-	/**
-	 * Allows the reaction to be added as a Lambda expression
-	 * @param clazz the class of event that the Reaction reacts to
-	 * @param func the function that gets run when event happens
-	 */
-	public <E extends Event> void addReactFunc(Class<E> clazz, BiFunction<E, EventPool, Boolean> func){
-		addReaction(clazz, new Reaction<E>(){
-
-			@Override
-			public boolean react(Event event, EventPool pool) {
-				return func.apply((E) event, pool);
-			}
-
-		});
-	}
-
 	/**
 	 * 
 	 * @param clazz the Event class whose reactions are being searched for
